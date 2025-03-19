@@ -5,17 +5,44 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "stickersmash", 
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "extra": {
+      "supabaseUrl": "https://your-supabase-url.supabase.co",
+      "supabaseAnonKey": "your-anon-key"
+    },
     "ios": {
-      "supportsTablet": true
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app requires access to your location to track movement.",
+        "NSLocationAlwaysUsageDescription": "This app requires access to your location even when running in the background."
+      },
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.stickersmash",
+      "associatedDomains": ["applinks:your-supabase-url.supabase.co"]
     },
     "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "your-supabase-url.supabase.co",
+              "pathPrefix": "/auth/callback"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",
