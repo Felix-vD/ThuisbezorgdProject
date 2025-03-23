@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import Auth from "./components/Auth";
 import Account from "./components/Account";
 import { View } from "react-native";
@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Import screens
 import About from "./about";
 import Location from "./tracking";
+import Login from "./screens/authentication/login";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,10 +30,11 @@ export default function App() {
   }, []);
 
   return (
-    <Tab.Navigator>
-      
-      <Tab.Screen name="About" component={About} />
-      <Tab.Screen name="Location" component={Location} />
-    </Tab.Navigator>
+    // <Tab.Navigator>
+    //
+    //   <Tab.Screen name="About" component={About} />
+    //   <Tab.Screen name="Location" component={Location} />
+    // </Tab.Navigator>
+      <Login />
   );
 }
