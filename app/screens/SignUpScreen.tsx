@@ -1,19 +1,46 @@
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {Image, SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../components/RootStackParamList';
+import React, { useState } from 'react';
+import global from '../styles/global'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
-const SignUpScreen = ({ navigation }: Props): React.JSX.Element => {
+export default function SignUpScreen() {
     return (
-        <View>
-            <Text>Welcome to the Sign Up Screen</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={{ fontSize: 18, color: 'blue' }}>Go to Login</Text>
-            </TouchableOpacity>
-        </View>
-    );
-};
+        <SafeAreaView style={global.container}>
+            <View style={global.container}>
 
-export default SignUpScreen;
+                <View style={global.logoContainer}>
+                    <Image source={require('../../assets/images/just_eat_logo.png')} style={global.logo}></Image>
+                </View>
+
+                <Text style={global.title}>Sign Up</Text>
+                <Text style={global.subtitle}>Create your account</Text>
+
+                <TextInput
+                    style={global.input}
+                    placeholder="Email"
+                    keyboardType="email-address"
+                />
+                <TextInput
+                    style={global.input}
+                    placeholder="Password"
+                    secureTextEntry
+                />
+                <TextInput
+                    style={global.input}
+                    placeholder="Repeat Password"
+                    secureTextEntry
+                />
+
+                <TouchableOpacity style={global.loginButton}>
+                    <Text style={global.loginButtonText}>SIGN UP &rarr;</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    );
+}
+
+
+

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import RootStack from "@/app/components/RootStack";
+import CurrentOrdersScreen from "@/app/screens/CurrentOrdersScreen";
 
 const startDataSession = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -24,6 +25,6 @@ const startDataSession = () => {
 export default function App(): React.JSX.Element {
   startDataSession()
   return (
-      <RootStack />
+      <CurrentOrdersScreen />
   );
 }
