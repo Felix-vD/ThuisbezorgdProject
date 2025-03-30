@@ -1,4 +1,6 @@
 import React from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from "../../RootStackParamList"
 
 import {
     View,
@@ -10,11 +12,12 @@ import {
     Image
 } from 'react-native';
 
+type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
-const Login = () => {
+const LoginScreen = ({ navigation }: Props) => {
     return (
         <SafeAreaView style={styles.container}>
-            {/* Logo */}
+
             <View style={styles.logoContainer}>
                 <Image source={require('../../components/ui/images/just_eat_logo.png')} style={styles.logo}></Image>
             </View>
@@ -29,27 +32,23 @@ const Login = () => {
                 autoCapitalize="none"
             />
 
-            {/* Password Input */}
             <TextInput
                 style={styles.input}
                 placeholder="Password"
                 secureTextEntry
             />
 
-            {/* Forgot Password Link */}
             <TouchableOpacity>
                 <Text style={styles.forgotPassword}>Forgot password</Text>
             </TouchableOpacity>
 
-            {/* Login Button */}
             <TouchableOpacity style={styles.loginButton}>
                 <Text style={styles.loginButtonText}>LOGIN →</Text>
             </TouchableOpacity>
 
-            {/* Sign Up Link */}
             <View style={styles.signUpContainer}>
                 <Text>Don't have an account yet? </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                     <Text style={styles.signUpLink}>Sign up</Text>
                 </TouchableOpacity>
             </View>
@@ -126,4 +125,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login;
+export default LoginScreen;

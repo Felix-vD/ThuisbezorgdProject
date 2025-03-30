@@ -1,18 +1,12 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import Auth from "./components/Auth";
-import Account from "./components/Account";
-import { View } from "react-native";
 import { Session } from "@supabase/supabase-js";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// Import screens
-import About from "./about";
-import Location from "./tracking";
-import Login from "./screens/authentication/login";
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from '../app/screens/authentication/LoginScreen'
+import SignUpScreen from "@/app/screens/authentication/SignUpScreen";
+import {RootStackParamList} from "@/app/RootStackParamList";
 
-const Tab = createBottomTabNavigator();
-
-export default function App() {
+const startDataSession = () => {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -28,13 +22,16 @@ export default function App() {
       authListener?.subscription.unsubscribe();
     };
   }, []);
+}
 
+export default function App(): React.JSX.Element {
+  startDataSession()
+
+  const Stack = createStackNavigator<RootStackParamList>();
   return (
-    // <Tab.Navigator>
-    //
-    //   <Tab.Screen name="About" component={About} />
-    //   <Tab.Screen name="Location" component={Location} />
-    // </Tab.Navigator>
-      <Login />
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+        </Stack.Navigator>
   );
 }
