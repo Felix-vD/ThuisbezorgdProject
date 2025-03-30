@@ -1,3 +1,5 @@
+//This component 
+
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { StyleSheet, View, Alert } from 'react-native';
@@ -10,24 +12,29 @@ interface Restaurant {
   id: number;
   name: string;
 }
-
+//Extract user Session as a prop that is of type Session
 export default function Account({ session }: { session: Session }) {
+  //use state for loading 
   const [loading, setLoading] = useState(true);
+  //use states for profile parameters
   const [username, setUsername] = useState('');
-  const [website, setWebsite] = useState('');
+  const [website, setWebsite] = useState(''); 
   const [avatarUrl, setAvatarUrl] = useState('');
   const [restaurant, setRestaurant] = useState('');
   const [isVerified, setIsVerified] = useState(false);
+  //list to store restaurants from supabase restaurants table
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  //custom hook to set global profile context
   const { setProfile } = useProfile(); // get setter from global context
-
+  //if user has a session, get profile and fetch restaurants
+  //useEffect to run the function when the session changes
   useEffect(() => {
     if (session) {
       getProfile();
       fetchRestaurants();
     }
   }, [session]);
-
+  //function to get profile data
   async function getProfile() {
     try {
       setLoading(true);
@@ -57,7 +64,7 @@ export default function Account({ session }: { session: Session }) {
       setLoading(false);
     }
   }
-
+  //function to fetch restaurants from supabase
   async function fetchRestaurants() {
     try {
       const { data, error } = await supabase
@@ -75,7 +82,7 @@ export default function Account({ session }: { session: Session }) {
       }
     }
   }
-
+  //function to update profile data
   async function updateProfile({
     username,
     website,
@@ -94,6 +101,7 @@ export default function Account({ session }: { session: Session }) {
       if (!session?.user) throw new Error('No user on the session!');
 
       // If the restaurant changes, we want to ensure is_verified is set to false.
+      // TODO: Update restaurant only when it is changed not everytime the profile is updated.
       const updates = {
         id: session.user.id,
         username,
@@ -145,13 +153,6 @@ export default function Account({ session }: { session: Session }) {
           label="Website"
           value={website || ''}
           onChangeText={(text) => setWebsite(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          label="Avatar URL"
-          value={avatarUrl || ''}
-          onChangeText={(text) => setAvatarUrl(text)}
         />
       </View>
       {/* Show current restaurant (if any) */}
