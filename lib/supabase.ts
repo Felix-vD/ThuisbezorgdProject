@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js'
 import { Platform } from 'react-native';
 const supabaseUrl = "https://scdvyzjumlzcnkheipwh.supabase.co"
