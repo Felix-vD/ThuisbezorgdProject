@@ -8,8 +8,10 @@ import {
     StyleSheet,
     ScrollView,
     Image,
+    Modal,
+    TextInput,
 } from 'react-native';
-import global from '../styles/global'
+import global from '../styles/global';
 
 const screenWidth = Dimensions.get('window').width;
 const segmentWidth = screenWidth / 2;
@@ -17,6 +19,8 @@ const segmentWidth = screenWidth / 2;
 export default function CurrentOrdersScreen() {
     const [activeTab, setActiveTab] = useState(0);
     const indicatorPosition = useRef(new Animated.Value(0)).current;
+    const [modalVisible, setModalVisible] = useState(false);
+    const [orderId, setOrderId] = useState('');
 
     const handleUpcomingPress = () => {
         setActiveTab(0);
@@ -34,6 +38,11 @@ export default function CurrentOrdersScreen() {
             duration: 200,
             useNativeDriver: false,
         }).start();
+    };
+
+    const handleSubmitOrder = () => {
+        console.log('Order submitted:', orderId);
+        setModalVisible(false);
     };
 
     const upcomingOrders = [
@@ -86,7 +95,7 @@ export default function CurrentOrdersScreen() {
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
-
+            {/* Sliding Segmented Control */}
             <View style={styles.slidingBarContainer}>
                 <View style={styles.slidingBar}>
                     <Animated.View
@@ -99,7 +108,12 @@ export default function CurrentOrdersScreen() {
                         style={[styles.segment, { width: segmentWidth }]}
                         onPress={handleUpcomingPress}
                     >
-                        <Text style={[styles.segmentText, activeTab === 0 && styles.activeSegmentText]}>
+                        <Text
+                            style={[
+                                styles.segmentText,
+                                activeTab === 0 && styles.activeSegmentText,
+                            ]}
+                        >
                             Upcoming Orders
                         </Text>
                     </TouchableOpacity>
@@ -107,16 +121,63 @@ export default function CurrentOrdersScreen() {
                         style={[styles.segment, { width: segmentWidth }]}
                         onPress={handlePickedUpPress}
                     >
-                        <Text style={[styles.segmentText, activeTab === 1 && styles.activeSegmentText]}>
+                        <Text
+                            style={[
+                                styles.segmentText,
+                                activeTab === 1 && styles.activeSegmentText,
+                            ]}
+                        >
                             Picked Up
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
 
+            {/* Orders List */}
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 {activeTab === 0 ? renderUpcomingOrders() : renderPickedUpOrders()}
             </ScrollView>
+
+            {/* Button at the Bottom to Open Popup */}
+            <TouchableOpacity
+                style={[global.loginButton, { margin: 20 }]}
+                onPress={() => setModalVisible(true)}
+            >
+                <Text style={global.loginButtonText}>Add Order</Text>
+            </TouchableOpacity>
+
+            {/* Modal Popup */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Enter Order ID</Text>
+                        <TextInput
+                            style={styles.modalInput}
+                            placeholder="Order ID"
+                            keyboardType="numeric"
+                            value={orderId}
+                            onChangeText={(text) => setOrderId(text)}
+                        />
+                        <TouchableOpacity
+                            style={[global.loginButton, { backgroundColor: '#F39200' }]}
+                            onPress={handleSubmitOrder}
+                        >
+                            <Text style={global.loginButtonText}>Submit Order</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[global.loginButton, { backgroundColor: '#F39200', marginTop: 10 }]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            <Text style={global.loginButtonText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -177,5 +238,32 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 14,
         marginBottom: 4,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#F39200',
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    modalInput: {
+        height: 50,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginBottom: 15,
+        paddingHorizontal: 10,
     },
 });
