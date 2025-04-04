@@ -1,46 +1,84 @@
-import {Image, SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../components/RootStackParamList';
 import React, { useState } from 'react';
-import global from '../styles/global'
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import global from '../styles/global';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  Image,
+  Alert
+} from 'react-native';
+import { signUpWithEmail } from '../../hooks/useAuth';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
+export type AuthStackParamList = {
+  Login: undefined;
+  SignUp: undefined;
+};
 
-export default function SignUpScreen() {
-    return (
-        <SafeAreaView style={global.container}>
-            <View style={global.container}>
+type Props = NativeStackScreenProps<AuthStackParamList, 'SignUp'>;
 
-                <View style={global.logoContainer}>
-                    <Image source={require('../../assets/images/just_eat_logo.png')} style={global.logo}></Image>
-                </View>
+export default function SignUpScreen({ navigation }: Props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-                <Text style={global.title}>Sign Up</Text>
-                <Text style={global.subtitle}>Create your account</Text>
+  async function handleSignUp() {
+    if (password !== repeatPassword) {
+      Alert.alert('Passwörter stimmen nicht überein!');
+      return;
+    }
+    setLoading(true);
+    const error = await signUpWithEmail(email, password);
+    if (!error) {
+      // Bei Erfolg wieder zum Login navigieren
+      navigation.navigate('Login');
+    }
+    setLoading(false);
+  }
 
-                <TextInput
-                    style={global.input}
-                    placeholder="Email"
-                    keyboardType="email-address"
-                />
-                <TextInput
-                    style={global.input}
-                    placeholder="Password"
-                    secureTextEntry
-                />
-                <TextInput
-                    style={global.input}
-                    placeholder="Repeat Password"
-                    secureTextEntry
-                />
+  return (
+    <SafeAreaView style={global.container}>
+      <View style={global.logoContainer}>
+        <Image 
+          source={require('../../assets/images/just_eat_logo.png')} 
+          style={global.logo} 
+        />
+      </View>
 
-                <TouchableOpacity style={global.loginButton}>
-                    <Text style={global.loginButtonText}>SIGN UP &rarr;</Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
-    );
+      <Text style={global.title}>Sign Up</Text>
+      <Text style={global.subtitle}>Create your account</Text>
+
+      <TextInput
+        style={global.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
+      />
+
+      <TextInput
+        style={global.input}
+        placeholder="Password"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      <TextInput
+        style={global.input}
+        placeholder="Repeat Password"
+        secureTextEntry
+        value={repeatPassword}
+        onChangeText={setRepeatPassword}
+      />
+
+      <TouchableOpacity style={global.loginButton} onPress={handleSignUp} disabled={loading}>
+        <Text style={global.loginButtonText}>SIGN UP →</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
 }
-
-
-

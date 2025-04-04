@@ -1,26 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { supabase } from '../lib/supabase';
 import { Session } from '@supabase/supabase-js';
-import Auth from './components/Auth';
-import Account from './components/Account';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import LoginScreen from './screens/LoginScreen';
+import SignUpScreen from './screens/SignUpScreen';
 import About from './about';
 import Location from './tracking';
+import Account from './components/Account';
 import { ProfileProvider } from '../context/ProfileContext';
+import useAutoRefreshSession from '../hooks/useAutoRefreshSession';
+
+type AuthStackParamList = {
+  Login: undefined;
+  SignUp: undefined;
+};
+
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const Tab = createBottomTabNavigator();
 
-export default function RootLayout() {
+function AuthNavigator() {
+  return (
+    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+      <AuthStack.Screen name="Login" component={LoginScreen} />
+      <AuthStack.Screen name="SignUp" component={SignUpScreen} />
+    </AuthStack.Navigator>
+  );
+}
+
+export default function Layout() {
+  useAutoRefreshSession();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Check for an existing session and listen for auth state changes
   useEffect(() => {
+    // Aktuelle Session abrufen
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
 
+    // Auf Auth-Statusänderungen lauschen
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
@@ -29,7 +51,7 @@ export default function RootLayout() {
       authListener?.subscription.unsubscribe();
     };
   }, []);
-  
+
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -38,21 +60,21 @@ export default function RootLayout() {
     );
   }
 
-  // If no session, show the Auth (login) screen
-  if (!session) {
-    return <Auth />;
-  }
-
-  // If a session exists, show the main app via a Tab Navigator
   return (
-    <ProfileProvider>
-      <Tab.Navigator>
-        <Tab.Screen name="About" component={About} />
-        <Tab.Screen name="Location" component={Location} />
-        <Tab.Screen name="Account">
-          {() => <Account session={session} />}
-        </Tab.Screen>
-      </Tab.Navigator>
-    </ProfileProvider>
+    
+      session ? (
+        <ProfileProvider>
+          <Tab.Navigator>
+            <Tab.Screen name="About" component={About} />
+            <Tab.Screen name="Location" component={Location} />
+            <Tab.Screen name="Account">
+              {() => <Account session={session} />}
+            </Tab.Screen>
+          </Tab.Navigator>
+        </ProfileProvider>
+      ) : (
+        <AuthNavigator />
+      )
+    
   );
 }
