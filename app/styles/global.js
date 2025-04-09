@@ -42,6 +42,14 @@ export default StyleSheet.create({
         marginBottom: 10,
         paddingHorizontal: 10,
     },
+    label: {
+        fontSize: 16,
+        marginBottom: 4,
+        color: '#555',
+      },
+    formGroup: {
+        marginVertical: 8,
+    },  
     forgotPassword: {
         color: '#F39200',
         alignSelf: 'flex-end',

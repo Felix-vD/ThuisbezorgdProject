@@ -12,6 +12,7 @@ import Location from './tracking';
 import Account from './components/Account';
 import { ProfileProvider } from '../context/ProfileContext';
 import useAutoRefreshSession from '../hooks/useAutoRefreshSession';
+import ProfileScreen from './screens/ProfileScreen';
 
 type AuthStackParamList = {
   Login: undefined;
@@ -64,11 +65,10 @@ export default function Layout() {
     
       session ? (
         <ProfileProvider>
-          <Tab.Navigator>
-            <Tab.Screen name="About" component={About} />
-            <Tab.Screen name="Location" component={Location} />
-            <Tab.Screen name="Account">
-              {() => <Account session={session} />}
+          <Tab.Navigator screenOptions={{ headerShown: false }}>
+            <Tab.Screen name="Orders" component={About} />
+            <Tab.Screen name="Profile">
+              {() => <ProfileScreen session={session} />}
             </Tab.Screen>
           </Tab.Navigator>
         </ProfileProvider>

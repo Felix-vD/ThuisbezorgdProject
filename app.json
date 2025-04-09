@@ -1,29 +1,43 @@
 {
   "expo": {
-    "name": "StickerSmash",
+    "name": "ThuisbezorgdTracking",
     "slug": "StickerSmash",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "stickersmash", 
+    "scheme": "stickersmash",
+    "deepLinking": true,
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "extra": {
-      "supabaseUrl": "https://your-supabase-url.supabase.co",
-      "supabaseAnonKey": "your-anon-key"
+      "supabaseUrl": "https://scdvyzjumlzcnkheipwh.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjZHZ5emp1bWx6Y25raGVpcHdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMTQ1MzEsImV4cCI6MjA1Nzg5MDUzMX0.WAPt5F7uT6WaOebLxpthHNOhP2bnaPcIBxBuIf8dHY8",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "35ec7f89-b120-45ca-b4e2-3674499d6c1c"
+      }
     },
     "ios": {
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app requires access to your location to track movement.",
         "NSLocationAlwaysUsageDescription": "This app requires access to your location even when running in the background.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "We use your location in the background to track deliveries.",
-        "UIBackgroundModes": ["location", "fetch"]
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.yourcompany.stickersmash",
-      "associatedDomains": ["applinks:your-supabase-url.supabase.co"]
+      "associatedDomains": [
+        "applinks:your-supabase-url.supabase.co"
+      ]
     },
     "android": {
+      "package": "com.felix.deliverydriver",
+      "versionCode": 1,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
@@ -43,7 +57,10 @@
               "pathPrefix": "/auth/callback"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },

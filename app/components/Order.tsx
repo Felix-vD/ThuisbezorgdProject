@@ -26,37 +26,7 @@ const LOCATION_TASK_NAME = 'driver-location-tracking';
 let CURRENT_ORDER_ID: number | null = null;
 let CURRENT_DRIVER_EMAIL: string | null = null;
 
-// Background Task definition
-TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
-  if (error) {
-    console.error('LOCATION_TASK_NAME error:', error);
-    return;
-  }
 
-  if (data) {
-    const { locations } = data as any;
-    for (const location of locations) {
-      const { latitude, longitude } = location.coords;
-
-      // Only insert if we have a valid order/email
-      if (CURRENT_ORDER_ID && CURRENT_DRIVER_EMAIL) {
-        // Insert the location into your 'driver_locations' table
-        // Columns: order_id, driver_email, latitude, longitude, timestamp
-        const { error: insertError } = await supabase.from('driver_locations').insert({
-          order_id: CURRENT_ORDER_ID,
-          driver_email: CURRENT_DRIVER_EMAIL,
-          latitude,
-          longitude,
-          timestamp: new Date().toISOString(), // Goes into timestamptz column
-        });
-
-        if (insertError) {
-          console.error('Error inserting location:', insertError.message);
-        }
-      }
-    }
-  }
-});
 
 interface OrderItem {
   id: number;
@@ -131,8 +101,9 @@ export default function AddOrder() {
 
   // Start background tracking for a given order
 const handleStartTracking = async (orderId: number) => {
+  console.log("start tracking", orderId);	
   if (!profile) return;
-
+  console.log("diggeridoo", profile.email);
   // 1. Check Foreground Permission
   let fgPermissions = await Location.getForegroundPermissionsAsync();
   if (fgPermissions.status !== 'granted') {
@@ -164,7 +135,7 @@ const handleStartTracking = async (orderId: number) => {
     );
     return;
   }
-
+  console.log("orderid", orderId, profile.email);
   // Set global variables for the background task
   CURRENT_ORDER_ID = orderId;
   CURRENT_DRIVER_EMAIL = profile.email; // or whichever field you prefer
@@ -180,7 +151,7 @@ const handleStartTracking = async (orderId: number) => {
       notificationBody: 'We are using your location to track your delivery.',
     },
   });
-
+  console.log("start tracking 2", orderId);	
   Alert.alert('Tracking Started', `Location tracking started for order ${orderId}.`);
 };
 
@@ -194,6 +165,7 @@ const handleStartTracking = async (orderId: number) => {
     if (CURRENT_ORDER_ID === orderId) {
       try {
         await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+        console.log("stop tracking", orderId, CURRENT_ORDER_ID, CURRENT_DRIVER_EMAIL);
         CURRENT_ORDER_ID = null;
         CURRENT_DRIVER_EMAIL = null;
         Alert.alert('Tracking Stopped', 'Location tracking has been stopped.');
