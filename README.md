@@ -126,6 +126,10 @@ Log in to your Expo account in DevTools (or expo login in CLI).
 
 Install Expo Go on your iOS/Android device.
 
+to log in to the application you can use the following credentials
+email: felixvandelden@gmail.com
+password: 123456
+
 In DevTools or CLI, select “Run on Android device/emulator” or “Run on iOS simulator”, or scan the QR code with Expo Go.
 
 The app will load your local bundle.
