@@ -105,7 +105,7 @@ A cross‑platform mobile app built with React Native and Expo. It tracks user l
 
 ### 1. Clone & Switch Branch  (Currently the final build is not in main but in feature-branch)
 ```bash
-git clone https://github.com/your-username/your-repo.git
+git clone https://github.com/Felix-vD/ThuisbezorgdProject.git
 cd your-repo
 git fetch
 git checkout feature-branch
