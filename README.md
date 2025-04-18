@@ -48,3 +48,66 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+
+```Project Related
+# StickerSmash Tracking App
+
+A cross‑platform mobile app built with React Native and Expo. It tracks user location in the background (Expo Location + Task Manager) and uses Supabase for authentication and data storage.
+
+> ⚠️ **Note:** All development work lives on the `feature-branch`. Be sure to check out that branch after cloning.
+
+---
+
+## Table of Contents
+
+1. [Features](#features)  
+2. [Tech Stack](#tech-stack)  
+3. [Prerequisites](#prerequisites)  
+4. [Getting Started](#getting-started)  
+5. [Testing on Device](#testing-on-device)  
+6. [Folder Structure](#folder-structure)  
+7. [Contributing](#contributing)  
+8. [License](#license)  
+
+---
+
+## Features
+
+- Email/password authentication via Supabase  
+- Background location tracking (expo-location + expo-task-manager)  
+- Profile management (view & edit)  
+- Bottom‑tab navigator (Orders/About, Profile)  
+- Auto‑refreshing Supabase session on app focus  
+
+---
+
+## Tech Stack
+
+- React Native (TypeScript)  
+- Expo (managed workflow)  
+- `expo-location` & `expo-task-manager`  
+- `@supabase/supabase-js` (v2)  
+- React Navigation (native stack + bottom tabs)  
+- Node.js & npm/Yarn  
+
+---
+
+## Prerequisites
+
+- **Node.js** v16+  
+- **npm** v8+ or **Yarn**  
+- **expo-cli** (global)  
+- A **Supabase** project (URL + anon key)  
+- An **Expo** account (for Expo Go testing)  
+
+---
+
+## Getting Started
+
+### 1. Clone & Switch Branch  
+```bash
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+git fetch
+git checkout feature-branch
