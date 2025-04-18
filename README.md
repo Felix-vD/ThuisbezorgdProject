@@ -51,7 +51,7 @@ Join our community of developers creating universal apps.
 
 
 ```Project Related
-# StickerSmash Tracking App
+# Thuisbezorgd Tracking App
 
 A cross‑platform mobile app built with React Native and Expo. It tracks user location in the background (Expo Location + Task Manager) and uses Supabase for authentication and data storage.
 
