@@ -10,7 +10,6 @@ interface Restaurant {
 
 export interface ProfileData {
   username: string;
-  avatarUrl: string;
   restaurant: string;
   isVerified: boolean;
 }
@@ -18,7 +17,6 @@ export interface ProfileData {
 export default function useProfileForm(session: Session | null) {
   const [loading, setLoading] = useState<boolean>(true);
   const [username, setUsername] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
   const [restaurant, setRestaurant] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   // New state: hold the initial restaurant for later comparison.
@@ -38,7 +36,7 @@ export default function useProfileForm(session: Session | null) {
       if (!session?.user) throw new Error('No user in the session.');
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`username, avatar_url, restaurant, is_verified`)
+        .select(`username, restaurant, is_verified`)
         .eq('id', session.user.id)
         .single();
       if (error && status !== 406) {
@@ -46,7 +44,6 @@ export default function useProfileForm(session: Session | null) {
       }
       if (data) {
         setUsername(data.username);
-        setAvatarUrl(data.avatar_url);
         setRestaurant(data.restaurant);
         setIsVerified(data.is_verified);
         // Store the initial restaurant for later comparison.
@@ -79,7 +76,6 @@ export default function useProfileForm(session: Session | null) {
       const updates = {
         id: session.user.id,
         username,
-        avatar_url: avatarUrl,
         updated_at: new Date(),
         restaurant,
         is_verified: newVerifiedStatus,
@@ -100,8 +96,6 @@ export default function useProfileForm(session: Session | null) {
     loading,
     username,
     setUsername,
-    avatarUrl,
-    setAvatarUrl,
     restaurant,
     setRestaurant,
     isVerified,

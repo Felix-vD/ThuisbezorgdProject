@@ -25,6 +25,8 @@ export default function SignUpScreen({ navigation }: Props) {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+
+  
   async function handleSignUp() {
     if (password !== repeatPassword) {
       Alert.alert('Passwörter stimmen nicht überein!');

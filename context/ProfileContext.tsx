@@ -5,8 +5,6 @@ import { supabase } from '../lib/supabase';
 interface Profile {
   email: string;
   username: string;
-  website: string;
-  avatarUrl: string;
   restaurant: string;
   is_verified: boolean;
 }
@@ -32,7 +30,7 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
         const user = sessionData.session.user;
         const { data, error } = await supabase
           .from('profiles')
-          .select(`username, website, avatar_url, restaurant, is_verified`)
+          .select(`username, restaurant, is_verified`)
           .eq('id', user.id)
           .single();
         if (error) {
@@ -41,8 +39,6 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
           setProfile({
             email: user.email ?? '',
             username: data.username,
-            website: data.website,
-            avatarUrl: data.avatar_url,
             restaurant: data.restaurant,
             is_verified: data.is_verified,
           });

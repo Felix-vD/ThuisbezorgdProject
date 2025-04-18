@@ -13,7 +13,7 @@ import Account from './components/Account';
 import { ProfileProvider } from '../context/ProfileContext';
 import useAutoRefreshSession from '../hooks/useAutoRefreshSession';
 import ProfileScreen from './screens/ProfileScreen';
-
+import { Linking } from 'react-native';
 type AuthStackParamList = {
   Login: undefined;
   SignUp: undefined;

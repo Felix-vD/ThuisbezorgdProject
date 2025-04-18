@@ -9,6 +9,9 @@
     "deepLinking": true,
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "updates": {
+      "enabled": false
+    },
     "extra": {
       "supabaseUrl": "https://scdvyzjumlzcnkheipwh.supabase.co",
       "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjZHZ5emp1bWx6Y25raGVpcHdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMTQ1MzEsImV4cCI6MjA1Nzg5MDUzMX0.WAPt5F7uT6WaOebLxpthHNOhP2bnaPcIBxBuIf8dHY8",

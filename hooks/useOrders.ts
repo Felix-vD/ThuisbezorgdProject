@@ -106,6 +106,17 @@ export function useOrders() {
 
   // Called when the user submits an order ID in the modal.
   const handleSubmitOrder = async () => {
+    if (!profile) return;
+    const { data: freshProfile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('email', profile.email)
+      .single();
+
+    if (error || !freshProfile) {
+      Alert.alert('Error', 'Unable to fetch profile data, please try again later.');
+      return;
+    }
     if (orderId === null || isNaN(orderId)) {
       Alert.alert('Invalid Input', 'Please enter a valid order ID.');
       return;
@@ -115,7 +126,8 @@ export function useOrders() {
       Alert.alert('Order Not Found', 'No order found with that ID.');
       return;
     }
-    if (order.restaurant !== profile?.restaurant) {
+    console.log('Fetched Order:', order.restaurant, "Profile Restaurant:", profile?.restaurant);
+    if (order.restaurant !== freshProfile?.restaurant) {
       Alert.alert('Order Mismatch', 'You can only add orders for your verified restaurant.');
       return;
     }
@@ -170,20 +182,40 @@ export function useOrders() {
   };
 
   // Stop tracking for a given order.
-  const handleStopTracking = async (orderId: number) => {
-    // Remove the order from the list.
-    setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
-    Alert.alert('Order Finalized', `Order ${orderId} has been finalized.`);
-    if (CURRENT_ORDER_ID === orderId) {
-      try {
-        await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
-        CURRENT_ORDER_ID = null;
-        CURRENT_DRIVER_EMAIL = null;
-        Alert.alert('Tracking Stopped', 'Location tracking has been stopped.');
-      } catch (error) {
-        console.error('Error stopping location updates:', error);
-      }
-    }
+  const handleStopTracking = (orderId: number) => {
+    // Show a confirmation dialog before stopping tracking.
+    Alert.alert(
+      "Confirm Stop Tracking",
+      `Are you sure you want to finalize and stop tracking for order ${orderId}? This action cannot be undone.`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Stop Tracking",
+          style: "destructive",
+          onPress: async () => {
+            // Remove the order from the list.
+            setOrders((prevOrders) =>
+              prevOrders.filter((order) => order.id !== orderId)
+            );
+            if (CURRENT_ORDER_ID === orderId) {
+              try {
+                await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+                CURRENT_ORDER_ID = null;
+                CURRENT_DRIVER_EMAIL = null;
+                Alert.alert("Tracking Stopped", "Location tracking has been stopped.");
+              } catch (error) {
+                console.error("Error stopping location updates:", error);
+              }
+            }
+            Alert.alert("Order Finalized", `Order ${orderId} has been finalized.`);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   // Open Google Maps with the given address.

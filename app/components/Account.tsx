@@ -18,8 +18,6 @@ export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
   //use states for profile parameters
   const [username, setUsername] = useState('');
-  const [website, setWebsite] = useState(''); 
-  const [avatarUrl, setAvatarUrl] = useState('');
   const [restaurant, setRestaurant] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   //list to store restaurants from supabase restaurants table
@@ -42,7 +40,7 @@ export default function Account({ session }: { session: Session }) {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`username, website, avatar_url, restaurant, is_verified`)
+        .select(`username, restaurant, is_verified`)
         .eq('id', session.user.id)
         .single();
       if (error && status !== 406) {
@@ -51,8 +49,6 @@ export default function Account({ session }: { session: Session }) {
 
       if (data) {
         setUsername(data.username);
-        setWebsite(data.website);
-        setAvatarUrl(data.avatar_url);
         setRestaurant(data.restaurant);
         setIsVerified(data.is_verified);
       }
@@ -85,14 +81,10 @@ export default function Account({ session }: { session: Session }) {
   //function to update profile data
   async function updateProfile({
     username,
-    website,
-    avatar_url,
     restaurant,
     is_verified,
   }: {
     username: string;
-    website: string;
-    avatar_url: string;
     restaurant: string;
     is_verified: boolean;
   }) {
@@ -105,8 +97,6 @@ export default function Account({ session }: { session: Session }) {
       const updates = {
         id: session.user.id,
         username,
-        website,
-        avatar_url,
         updated_at: new Date(),
         restaurant,
         is_verified: false, // Always reset to false on update.
@@ -119,8 +109,6 @@ export default function Account({ session }: { session: Session }) {
         setProfile({
           email: session.user.email ?? '',
           username,
-          website,
-          avatarUrl: avatar_url,
           restaurant,
           is_verified: false,
         });
@@ -146,13 +134,6 @@ export default function Account({ session }: { session: Session }) {
           label="Username"
           value={username || ''}
           onChangeText={(text) => setUsername(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          label="Website"
-          value={website || ''}
-          onChangeText={(text) => setWebsite(text)}
         />
       </View>
       {/* Show current restaurant (if any) */}
@@ -181,8 +162,6 @@ export default function Account({ session }: { session: Session }) {
           onPress={() =>
             updateProfile({
               username,
-              website,
-              avatar_url: avatarUrl,
               restaurant,
               is_verified: false,
             })

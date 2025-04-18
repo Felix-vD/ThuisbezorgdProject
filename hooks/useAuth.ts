@@ -1,7 +1,7 @@
 // services/authService.js
 import { Alert, AppState } from 'react-native';
 import { supabase } from '../lib/supabase';
-
+import * as Linking from 'expo-linking';
 // Set up auto-refresh when app state changes
 AppState.addEventListener('change', (state) => {
   if (state === 'active') {
@@ -26,9 +26,12 @@ export async function signInWithEmail(email: string, password: string) {
 
 // Function to sign up a user with email and password
 export async function signUpWithEmail(email: string, password: string) {
+  console.log("This is the URL", Linking.createURL('login'));
+  const redirectUrl = Linking.createURL('');
   const { data: { session }, error } = await supabase.auth.signUp({
     email,
     password,
+    
   });
   if (error) {
     Alert.alert(error.message);

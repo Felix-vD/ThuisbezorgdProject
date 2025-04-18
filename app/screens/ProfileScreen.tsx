@@ -16,8 +16,6 @@ export default function ProfileScreen({ session }: ProfileScreenProps) {
     loading,
     username,
     setUsername,
-    avatarUrl,
-    setAvatarUrl,
     restaurant,
     setRestaurant,
     restaurants,
